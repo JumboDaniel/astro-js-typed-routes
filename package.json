@@ -5,6 +5,11 @@
   "type": "module",
   "description": "Type-safe route generation for Astro — auto-generated ROUTES object, $path() URL builder, and typed createRoute() helpers.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JumboDaniel/astro-js-typed-routes.git"
+  },
+  "homepage": "https://github.com/JumboDaniel/astro-js-typed-routes",
   "keywords": [
     "astro",
     "astro-integration",

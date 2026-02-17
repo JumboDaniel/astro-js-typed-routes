@@ -1,0 +1,31 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { $path, type RouteOptions } from "../path";
+
+type InternalProps = Omit<HTMLAttributes<"a">, "href"> &
+  RouteOptions & { external?: false };
+
+type ExternalProps = Omit<HTMLAttributes<"a">, "href"> & {
+  external: true;
+  href: string;
+};
+
+export type Props = InternalProps | ExternalProps;
+
+const props = Astro.props;
+
+let href: string;
+let anchorProps: Record<string, any>;
+
+if (props.external) {
+  const { external: _, href: rawHref, ...rest } = props as ExternalProps;
+  href = rawHref;
+  anchorProps = rest;
+} else {
+  const { to, params, locale, search, hash, ...rest } = props as InternalProps;
+  href = $path({ to, params, locale, search, hash });
+  anchorProps = rest;
+}
+---
+
+<a href={href} {...anchorProps}><slot /></a>

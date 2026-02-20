@@ -2,6 +2,7 @@ import type { AstroGlobal, GetStaticPaths } from "astro";
 import { $path, type RouteOptions } from "./path";
 
 /** Shorthand for `AstroGlobal` with all generics set to `any`. */
+// oxlint-disable-next-line typescript-eslint/no-explicit-any -- mirrors Astro's own type signature
 type AstroAny = AstroGlobal<any, any, any>;
 
 /**

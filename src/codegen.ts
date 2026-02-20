@@ -27,10 +27,8 @@ export function generateRoutes(config: AstroConfig): void {
   mkdirSync(dirname(dtsPath), { recursive: true });
   writeFileSync(dtsPath, dtsOutput, "utf-8");
 
-  // Generate the ROUTES runtime object
-  const routesOutput = config.i18n
-    ? buildI18nRoutesFile(pages, config.i18n)
-    : buildFlatRoutesFile(pages);
+  // Generate the ROUTES runtime object (always flat — locale prefixing is handled by $path())
+  const routesOutput = buildRoutesFile(pages);
   writeFileSync(routesPath, routesOutput, "utf-8");
 
   console.log(`[astro-typed-routes] generated (${pages.length} routes)`);
@@ -94,8 +92,9 @@ declare module "astro-typed-routes/link" {
   import type { RouteOptions, RouteId } from "astro-typed-routes/path";
 
   type LinkBase = Omit<HTMLAttributes<"a">, "href">;
-  type ExternalProps = LinkBase & { external: true; href: string };
-  type InternalProps<T extends RouteId> = LinkBase & RouteOptions<T> & { external?: false };
+  type ExternalProps = LinkBase & { external: true; href: string; to?: never };
+  type InternalProps<T extends RouteId> = LinkBase &
+    RouteOptions<T> & { external?: false; href?: never };
 
   export type Props<T extends RouteId> = ExternalProps | InternalProps<T>;
   export default function Link<T extends RouteId>(props: Props<T>): any;
@@ -106,8 +105,9 @@ declare module "astro-typed-routes/link-react" {
   import type { RouteOptions, RouteId } from "astro-typed-routes/path";
 
   type LinkBase = Omit<ComponentProps<"a">, "href">;
-  type ExternalProps = LinkBase & { external: true; href: string };
-  type InternalProps<T extends RouteId> = LinkBase & RouteOptions<T> & { external?: false };
+  type ExternalProps = LinkBase & { external: true; href: string; to?: never };
+  type InternalProps<T extends RouteId> = LinkBase &
+    RouteOptions<T> & { external?: false; href?: never };
 
   export type ReactLinkProps<T extends RouteId> = ExternalProps | InternalProps<T>;
   export default function Link<T extends RouteId>(props: ReactLinkProps<T>): any;
@@ -118,49 +118,16 @@ declare module "astro-typed-routes/link-react" {
 // ─── ROUTES Runtime Object ────────────────────────────────────────
 
 /**
- * Generates the `routes.gen.ts` file for projects **without** i18n.
- * Contains the `ROUTES` runtime object.
+ * Generates the `routes.gen.ts` file containing the `ROUTES` runtime object.
+ *
+ * The ROUTES object is always flat — locale prefixing is NOT baked in.
+ * Use `$path({ href: "/test", locale: "fr" })` to add locale prefixes at runtime.
  */
-function buildFlatRoutesFile(pages: PageNode[]): string {
+function buildRoutesFile(pages: PageNode[]): string {
   return [
     header(),
     `export const ROUTES = {`,
     buildRouteObject(pages, ""),
-    `} as const;`,
-    "",
-  ].join("\n");
-}
-
-/**
- * Generates the `routes.gen.ts` file for projects **with** i18n.
- * Wraps routes in locale namespaces: `ROUTES["en"].about()`.
- */
-function buildI18nRoutesFile(
-  pages: PageNode[],
-  i18n: NonNullable<AstroConfig["i18n"]>,
-): string {
-  const { defaultLocale, locales } = i18n;
-  const prefixDefault =
-    i18n.routing && typeof i18n.routing === "object"
-      ? (i18n.routing.prefixDefaultLocale ?? false)
-      : false;
-
-  const localeBlocks = locales.map((locale) => {
-    const localeCode = typeof locale === "string" ? locale : locale.path;
-    const isDefault = localeCode === defaultLocale;
-    const prefix = isDefault && !prefixDefault ? "" : `/${localeCode}`;
-
-    return [
-      `  "${localeCode}": {`,
-      buildRouteObject(pages, prefix, "    "),
-      `  },`,
-    ].join("\n");
-  });
-
-  return [
-    header(),
-    `export const ROUTES = {`,
-    localeBlocks.join("\n"),
     `} as const;`,
     "",
   ].join("\n");

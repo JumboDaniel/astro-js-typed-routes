@@ -1,73 +1,131 @@
-# React + TypeScript + Vite
+# Astro Typed Routes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Type-safe routing for Astro.** Auto-generated route definitions, typed links, and URL builders.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🚀 **Auto-generated types**: Scans your `src/pages` and generates strict types for all your routes.
+- 🔗 **Type-safe Link component**: Drop-in replacement for `<a>` that requires valid routes.
+- 🛠️ **$path() builder**: Construct URLs programmatically with type safety.
+- 🧩 **Dynamic Params**: Strict typing for route parameters (e.g. `[slug]`).
+- 🌐 **i18n Ready**: Works seamlessly with Astro's i18n routing.
 
-## React Compiler
+## Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm add astro-typed-routes
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Setup
+
+Add the integration to your `astro.config.mjs`:
 
 ```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+import { defineConfig } from "astro/config";
+import typedRoutes from "astro-typed-routes";
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+export default defineConfig({
+  integrations: [typedRoutes()],
+});
 ```
+
+Run your dev server (`pnpm dev`) to generate the initial types.
+
+## Usage
+
+### 1. Type-Safe Links
+
+Use the `Link` component for navigation. It validates your `to` prop against your actual routes.
+
+**React:**
+
+```tsx
+import Link from "astro-typed-routes/link-react";
+
+// ✅ Valid route
+<Link to="/about">About Us</Link>
+
+// ✅ Valid dynamic route (requires params!)
+<Link to="/blog/[slug]" params={{ slug: "hello-world" }}>
+  Read Post
+</Link>
+
+// ❌ TypeScript Error: Route doesn't exist
+<Link to="/invalid-page" />
+
+// ❌ TypeScript Error: Missing 'slug' param
+<Link to="/blog/[slug]" />
+```
+
+**Astro:**
+
+```astro
+---
+import Link from "astro-typed-routes/link";
+---
+
+<Link to="/contact">Contact</Link>
+```
+
+### 2. External Links
+
+For external URLs, use the `href` prop (and `to` is forbidden).
+
+```tsx
+<Link external href="https://github.com">
+  GitHub
+</Link>
+```
+
+### 3. Programmatic URLs (`$path`)
+
+Use `$path` to build URL strings safely in your scripts or server-side code.
+
+```ts
+import { $path } from "astro-typed-routes/path";
+
+const url = $path({
+  to: "/blog/[slug]",
+  params: { slug: "my-post" },
+  search: { ref: "newsletter" },
+  hash: "comments",
+});
+
+// Output: "/blog/my-post?ref=newsletter#comments"
+```
+
+### 4. Runtime Route Object (`ROUTES`)
+
+Access route definitions at runtime if needed. Params must be passed explicitly.
+
+```ts
+import { ROUTES } from "astro-typed-routes/routes"; // Generated file
+
+// Static route
+const home = ROUTES.index(); // -> "/"
+
+// Dynamic route
+const post = ROUTES["[lng]"].index({ lng: "en" }); // -> "/en"
+```
+
+### 5. Helper Utilities (`createRoute`)
+
+Create reusable route helpers bound to a specific path.
+
+```ts
+import { createRoute } from "astro-typed-routes/create-route";
+
+const BlogPost = createRoute({ routeId: "/blog/[slug]" });
+
+export const getStaticPaths = BlogPost.createGetStaticPaths(async () => {
+  // ...
+});
+
+export function GET(astro) {
+  // Type-safe params access
+  const { slug } = BlogPost.getParams(astro);
+}
+```
+
+## License
+MIT

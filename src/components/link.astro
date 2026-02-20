@@ -2,30 +2,37 @@
 import type { HTMLAttributes } from "astro/types";
 import { $path, type RouteOptions } from "../path";
 
-type InternalProps = Omit<HTMLAttributes<"a">, "href"> &
-  RouteOptions & { external?: false };
+type LinkBase = Omit<HTMLAttributes<"a">, "href">;
 
-type ExternalProps = Omit<HTMLAttributes<"a">, "href"> & {
+type InternalProps = LinkBase &
+  RouteOptions & {
+    external?: false;
+    href?: never;
+  };
+
+type ExternalProps = LinkBase & {
   external: true;
   href: string;
+  to?: never;
 };
 
 export type Props = InternalProps | ExternalProps;
 
-const props = Astro.props;
+const { external = false, ...props } = Astro.props;
 
-let href: string;
+let resolvedHref: string;
 let anchorProps: Record<string, any>;
 
-if (props.external) {
-  const { external: _, href: rawHref, ...rest } = props as ExternalProps;
-  href = rawHref;
+if (external) {
+  const { href: rawHref, ...rest } = props as unknown as ExternalProps;
+  resolvedHref = rawHref;
   anchorProps = rest;
 } else {
-  const { to, params, locale, search, hash, ...rest } = props as InternalProps;
-  href = $path({ to, params, locale, search, hash });
+  const { to, params, locale, search, hash, ...rest } =
+    props as unknown as InternalProps;
+  resolvedHref = $path({ to, params, locale, search, hash });
   anchorProps = rest;
 }
 ---
 
-<a href={href} {...anchorProps}><slot /></a>
+<a href={resolvedHref} {...anchorProps}><slot /></a>

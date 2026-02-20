@@ -35,7 +35,7 @@ export function generateRoutes(config: AstroConfig): void {
 }
 
 // ─── Declaration File (.d.ts) ─────────────────────────────────────
-
+//
 /**
  * Builds the `declare module` .d.ts file that overrides the loose
  * source types with project-specific typed versions.

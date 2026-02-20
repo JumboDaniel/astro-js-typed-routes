@@ -55,7 +55,7 @@
     "lint:fix": "oxlint --fix",
     "prepack": "pnpm build",
     "release": "changeset publish",
-    "release:local": "pnpm changeset version && pnpm install && git add . && git commit -m \"chore: version bump\" && pnpm release"
+    "release:local": "node -e \"require('fs').writeFileSync('.changeset/bump.md', '---\\n\\\"@jumbodaniel/astro-js-typesafe-routes\\\": patch\\n---\\n\\nauto')\" && pnpm changeset version && pnpm install && git add . && git commit -m \"chore: version bump\" && pnpm release"
   },
   "peerDependencies": {
     "astro": ">=5.0.0",

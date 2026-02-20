@@ -1,5 +1,5 @@
 {
-  "name": "@jumbodaniel/astro-typed-routes",
+  "name": "astro-typesafe-routes",
   "author": "Jumbo Daniel",
   "version": "0.0.1",
   "type": "module",

@@ -1,7 +1,7 @@
 {
   "name": "astro-js-typesafe-routes",
   "author": "Jumbo Daniel",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "description": "Type-safe route generation for Astro — auto-generated ROUTES object, $path() URL builder, and typed createRoute() helpers.",
   "license": "MIT",
@@ -55,7 +55,7 @@
     "lint:fix": "oxlint --fix",
     "prepack": "pnpm build",
     "release": "changeset publish",
-    "release:local": "node -e \"require('fs').writeFileSync('.changeset/bump.md', '---\\n\\\"@jumbodaniel/astro-js-typesafe-routes\\\": patch\\n---\\n\\nauto')\" && pnpm changeset version && pnpm install && git add . && git commit -m \"chore: version bump\" && pnpm release"
+    "release:local": "node -e \"require('fs').writeFileSync('.changeset/bump.md', '---\\n\\\"astro-js-typesafe-routes\\\": patch\\n---\\n\\nauto')\" && pnpm changeset version && pnpm install && git add . && git commit -m \"chore: version bump\" && pnpm release"
   },
   "peerDependencies": {
     "astro": ">=5.0.0",

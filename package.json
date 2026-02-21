@@ -54,10 +54,10 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "prepack": "pnpm build",
-    "prepublish": "git add . && git commit -m \"chore: version bump\"",
-    "release:patch": "git add . && git commit -m \"chore: version bump\" && pnpm version patch && pnpm publish --access public",
-    "release:minor": "pnpm version minor && pnpm publish --access public",
-    "release:major": "pnpm version major && pnpm publish --access public",
+    "git:commit": "git add . && git commit -m \"chore: version bump\"",
+    "release:patch": "pnpm git:commit && pnpm version patch && pnpm publish --access public",
+    "release:minor": "pnpm git:commit && pnpm version minor && pnpm publish --access public",
+    "release:major": "pnpm git:commit && pnpm version major && pnpm publish --access public",
     "release": "pnpm publish --access public"
   },
   "peerDependencies": {

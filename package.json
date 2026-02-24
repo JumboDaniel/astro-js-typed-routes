@@ -1,7 +1,7 @@
 {
   "name": "astro-js-typesafe-routes",
   "author": "Jumbo Daniel",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "description": "Type-safe route generation for Astro — auto-generated ROUTES object, $path() URL builder, and typed createRoute() helpers.",
   "license": "MIT",
@@ -75,7 +75,6 @@
   "dependencies": {
     "vite-plugin-dts": "^4.5.4"
   },
-  
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",

@@ -6,7 +6,7 @@ export default function typedRoutes(): AstroIntegration {
   let config: AstroConfig;
 
   return {
-    name: "astro-typed-routes",
+    name: "astro-js-typesafe-routes",
     hooks: {
       "astro:config:done": ({ config: resolved }) => {
         config = resolved;

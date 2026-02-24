@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1771925590494" clover="3.2.0">
+  <project timestamp="1771925590494" name="All files">
+    <metrics statements="12" coveredstatements="12" conditionals="10" coveredconditionals="10" methods="1" coveredmethods="1" elements="23" coveredelements="23" complexity="0" loc="12" ncloc="12" packages="1" files="1" classes="1"/>
+    <file name="path.ts" path="C:\Users\USER\Documents\CODE\projects\astro-typed-routes\src\path.ts">
+      <metrics statements="12" coveredstatements="12" conditionals="10" coveredconditionals="10" methods="1" coveredmethods="1"/>
+      <line num="37" count="9" type="stmt"/>
+      <line num="39" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="40" count="3" type="stmt"/>
+      <line num="41" count="4" type="stmt"/>
+      <line num="45" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="46" count="2" type="stmt"/>
+      <line num="49" count="9" type="cond" truecount="4" falsecount="0"/>
+      <line num="50" count="2" type="stmt"/>
+      <line num="51" count="2" type="stmt"/>
+      <line num="54" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="55" count="2" type="stmt"/>
+      <line num="58" count="9" type="stmt"/>
+    </file>
+  </project>
+</coverage>

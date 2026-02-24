@@ -39,6 +39,10 @@ describe("$path", () => {
     expect($path({ to: "/about", hash: "team" })).toBe("/about#team");
   });
 
+  it("handles empty hash", () => {
+    expect($path({ to: "/about", hash: "" })).toBe("/about");
+  });
+
   it("combines everything", () => {
     expect(
       $path({

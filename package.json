@@ -46,7 +46,10 @@
       "types": "./dist/link.d.ts",
       "import": "./dist/link.js",
       "require": "./dist/link.cjs"
-    }
+    },
+    "./routes": "./.generated/routes.gen.ts",
+    "./typed-routes": "./.generated/typed-routes.d.ts",
+    "./typed-routes.d.ts": "./.generated/typed-routes.d.ts"
   },
   "scripts": {
     "build": "pnpm test && pnpm lint --fix && vite build",
@@ -77,6 +80,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@vitest/coverage-v8": "4.0.18",
     "astro": "^5.17.2",
     "eslint": "^9.39.1",
     "oxlint": "^1.48.0",

@@ -75,6 +75,7 @@
   "dependencies": {
     "vite-plugin-dts": "^4.5.4"
   },
+  
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@types/node": "^24.10.1",

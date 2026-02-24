@@ -1,4 +1,4 @@
-# Astro Typed Routes
+# Astro JS Typesafe Routes
 
 **Type-safe routing for Astro.** Auto-generated route definitions, typed links, and URL builders.
 
@@ -13,7 +13,7 @@
 ## Installation
 
 ```bash
-pnpm add astro-typed-routes
+pnpm add astro-js-typesafe-routes
 ```
 
 ## Setup
@@ -22,7 +22,7 @@ Add the integration to your `astro.config.mjs`:
 
 ```js
 import { defineConfig } from "astro/config";
-import typedRoutes from "astro-typed-routes";
+import typedRoutes from "astro-js-typesafe-routes";
 
 export default defineConfig({
   integrations: [typedRoutes()],
@@ -40,7 +40,7 @@ Use the `Link` component for navigation. It validates your `to` prop against you
 **React:**
 
 ```tsx
-import Link from "astro-typed-routes/link-react";
+import Link from "astro-js-typesafe-routes/link-react";
 
 // ✅ Valid route
 <Link to="/about">About Us</Link>
@@ -61,7 +61,7 @@ import Link from "astro-typed-routes/link-react";
 
 ```astro
 ---
-import Link from "astro-typed-routes/link";
+import Link from "astro-js-typesafe-routes/link";
 ---
 
 <Link to="/contact">Contact</Link>
@@ -82,7 +82,7 @@ For external URLs, use the `href` prop (and `to` is forbidden).
 Use `$path` to build URL strings safely in your scripts or server-side code.
 
 ```ts
-import { $path } from "astro-typed-routes/path";
+import { $path } from "astro-js-typesafe-routes/path";
 
 const url = $path({
   to: "/blog/[slug]",
@@ -99,7 +99,7 @@ const url = $path({
 Access route definitions at runtime if needed. Params must be passed explicitly.
 
 ```ts
-import { ROUTES } from "astro-typed-routes/routes"; // Generated file
+import { ROUTES } from "astro-js-typesafe-routes/routes"; // Generated file
 
 // Static route
 const home = ROUTES.index(); // -> "/"
@@ -113,7 +113,7 @@ const post = ROUTES["[lng]"].index({ lng: "en" }); // -> "/en"
 Create reusable route helpers bound to a specific path.
 
 ```ts
-import { createRoute } from "astro-typed-routes/create-route";
+import { createRoute } from "astro-js-typesafe-routes/create-route";
 
 const BlogPost = createRoute({ routeId: "/blog/[slug]" });
 
@@ -128,4 +128,5 @@ export function GET(astro) {
 ```
 
 ## License
+
 MIT

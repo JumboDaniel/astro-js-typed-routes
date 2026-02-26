@@ -80,7 +80,7 @@ declare module "astro-js-typesafe-routes/create-route" {
   import type { AstroGlobal, GetStaticPaths } from "astro";
   import type { RouteId, RouteOptions, ParamsRecord } from "astro-js-typesafe-routes/path";
 
-  type AstroAny = AstroGlobal<any, any, any>;
+  type AstroAny = AstroGlobal<unknown, unknown, unknown>;
 
   export function createRoute<T extends RouteId>(opts: { routeId: T }): {
     getParams: (astro: AstroAny) => Routes[T]["params"] extends null ? never : ParamsRecord<T>;
@@ -101,7 +101,7 @@ declare module "astro-js-typesafe-routes/link" {
     RouteOptions<T> & { external?: false; href?: never };
 
   export type Props<T extends RouteId> = ExternalProps | InternalProps<T>;
-  export default function Link<T extends RouteId>(props: Props<T>): any;
+  export default function Link<T extends RouteId>(props: Props<T>): unknown;
 }
 
 declare module "astro-js-typesafe-routes/link-react" {
@@ -114,7 +114,7 @@ declare module "astro-js-typesafe-routes/link-react" {
     RouteOptions<T> & { external?: false; href?: never };
 
   export type ReactLinkProps<T extends RouteId> = ExternalProps | InternalProps<T>;
-  export default function Link<T extends RouteId>(props: ReactLinkProps<T>): any;
+  export default function Link<T extends RouteId>(props: ReactLinkProps<T>): unknown;
 }
 `;
 }

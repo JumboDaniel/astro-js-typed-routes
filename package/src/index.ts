@@ -15,14 +15,19 @@ export default function typedRoutes(): AstroIntegration {
         try {
           const srcDir = fileURLToPath(resolvedConfig.srcDir);
           const envDtsPath = join(srcDir, "env.d.ts");
-          logger.info("starting to")
+          
+          let content = "";
           if (existsSync(envDtsPath)) {
-            const content = readFileSync(envDtsPath, "utf-8");
-            const reference = `/// <reference types="astro-js-typesafe-routes/typed-routes" />`;
-            if (!content.includes(reference)) {
-              writeFileSync(envDtsPath, `${reference}\n${content}`, "utf-8");
-              logger.info("Added types reference to src/env.d.ts");
-            }
+            content = readFileSync(envDtsPath, "utf-8");
+          } else {
+            // For tiny minimal Astro templates that don't have env.d.ts
+            content = `/// <reference types="astro/client" />\n`;
+          }
+
+          const reference = `/// <reference types="astro-js-typesafe-routes/typed-routes" />`;
+          if (!content.includes(reference)) {
+            writeFileSync(envDtsPath, `${reference}\n${content}`, "utf-8");
+            logger.info("Added types reference to src/env.d.ts");
           }
         } catch (err) {
           logger.warn("Could not inject types into src/env.d.ts automatically: " + String(err));

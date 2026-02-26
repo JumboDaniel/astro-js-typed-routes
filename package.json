@@ -42,7 +42,7 @@
       "require": "./dist/create-route.cjs"
     },
     "./link": "./src/components/link.astro",
-    "./link-react": {
+    "./link/react": {
       "types": "./dist/link.d.ts",
       "import": "./dist/link.js",
       "require": "./dist/link.cjs"

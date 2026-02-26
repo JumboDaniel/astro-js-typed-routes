@@ -40,7 +40,7 @@ Use the `Link` component for navigation. It validates your `to` prop against you
 **React:**
 
 ```tsx
-import Link from "astro-js-typesafe-routes/link-react";
+import Link from "astro-js-typesafe-routes/link/react";
 
 // ✅ Valid route
 <Link to="/about">About Us</Link>

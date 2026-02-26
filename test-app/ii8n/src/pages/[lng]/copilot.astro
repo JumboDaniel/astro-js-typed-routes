@@ -1,0 +1,11 @@
+---
+export function getStaticPaths() {
+  return [
+    { params: { lng: "en" } },
+    { params: { lng: "en-US" } },
+    { params: { lng: "fr" } },
+    { params: { lng: "fr-CA" } },
+  ];
+}
+---
+"Hello"

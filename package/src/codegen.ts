@@ -17,6 +17,18 @@ import { extractParams } from "./utils.js";
  */
 export function generateRoutes(config: AstroConfig): void {
   const pagesDir = fileURLToPath(new URL("pages/", config.srcDir));
+  const locales = config.i18n?.locales;
+  function localesToUnion(localesArray: NonNullable<AstroConfig["i18n"]>["locales"]): string {
+    const codes: string[] = []; 
+    for (const locale of localesArray) {
+      if (typeof locale === "object") {
+        codes.push(...locale.codes);
+      } else {
+        codes.push(locale);
+      }
+    }
+    return codes.map((l) => `"${l}"`).join(" | ");
+  }
   const generatedDir = fileURLToPath(
     new URL("node_modules/astro-js-typesafe-routes/.generated/", config.root),
   );
@@ -27,7 +39,7 @@ export function generateRoutes(config: AstroConfig): void {
   const pages = scanPages(pagesDir);
 
   // Generate the declare module .d.ts file
-  const dtsOutput = buildDeclarationFile(pages);
+  const dtsOutput = buildDeclarationFile(pages, locales ? localesToUnion(locales) : "string");
   mkdirSync(dirname(dtsPath), { recursive: true });
   writeFileSync(dtsPath, dtsOutput, "utf-8");
 
@@ -44,7 +56,7 @@ export function generateRoutes(config: AstroConfig): void {
  * Builds the `declare module` .d.ts file that overrides the loose
  * source types with project-specific typed versions.
  */
-function buildDeclarationFile(pages: PageNode[]): string {
+function buildDeclarationFile(pages: PageNode[], locales:string): string {
   const routeRows = pages.map((p) => {
     const params = p.params.length === 0 ? "null" : JSON.stringify(p.params);
     return `    "${p.routePath}": { params: ${params} };`;
@@ -56,12 +68,12 @@ declare module "astro-js-typesafe-routes/path" {
   export type Routes = {
 ${routeRows.join("\n")}
   };
-
   export type RouteId = keyof Routes;
+  export type AllowedLocales = ${locales};
 
   export type ParamsRecord<T extends RouteId> =
     Routes[T]["params"] extends Array<string>
-      ? { [K in Routes[T]["params"][number]]: string }
+      ? { [K in Routes[T]["params"][number]]: K extends "lng" ? AllowedLocales : string }
       : never;
 
   export type RouteOptions<T extends RouteId> = {

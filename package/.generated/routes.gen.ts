@@ -2,5 +2,11 @@
 // Re-run dev server or build to regenerate.
 
 export const ROUTES = {
+  "contact": () => "/contact",
   "__index": () => "/",
+  "[lng]": {
+    "contact": (p: { lng: string }) => `/${p.lng}/contact`,
+    "copilot": (p: { lng: string }) => `/${p.lng}/copilot`,
+    "friends": (p: { lng: string }) => `/${p.lng}/friends`,
+  },
 } as const;

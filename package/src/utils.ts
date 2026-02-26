@@ -1,4 +1,5 @@
 import type { AstroConfig } from "astro";
+import { fileURLToPath } from "node:url";
 
 /**
  * Checks if a file is a page file.
@@ -7,10 +8,18 @@ import type { AstroConfig } from "astro";
  * @returns True if the file is a page file, false otherwise.
  */
 export function isPageFile(filePath: string, config: AstroConfig): boolean {
-  const pagesDir = new URL("pages/", config.srcDir).pathname;
+  // filePath from Vite watcher is an absolute OS path (e.g. C:\Users\... or /Users/...)
+  // config.srcDir is a file:// URL
+  const pagesDirURL = new URL("pages/", config.srcDir);
+  const pagesDirPath = fileURLToPath(pagesDirURL);
+
+  // Normalize paths to ensure cross-platform compatibility (Windows vs Unix slashes)
+  const normalizedFilePath = filePath.replace(/\\/g, "/");
+  const normalizedPagesDir = pagesDirPath.replace(/\\/g, "/");
+
   return (
-    filePath.startsWith(pagesDir) &&
-    /\.(astro|ts|tsx|js|jsx|md|mdx)$/.test(filePath)
+    normalizedFilePath.startsWith(normalizedPagesDir) &&
+    /\.(astro|ts|tsx|js|jsx|md|mdx)$/.test(normalizedFilePath)
   );
 }
 

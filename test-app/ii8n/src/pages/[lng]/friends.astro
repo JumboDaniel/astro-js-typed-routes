@@ -1,0 +1,14 @@
+---
+export function getStaticPaths() {
+  return [
+    { params: { lng: "en" } },
+    { params: { lng: "es" } },
+    { params: { lng: "de" } },
+    { params: { lng: "en-US" } },
+    { params: { lng: "fr" } },
+    { params: { lng: "fr-CA" } },
+  ];
+}
+---
+
+<h1>Testing Dynamic Route Generation</h1>

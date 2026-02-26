@@ -2,14 +2,18 @@
 
 declare module "astro-js-typesafe-routes/path" {
   export type Routes = {
+    "/contact": { params: null };
     "/": { params: null };
+    "/[lng]/contact": { params: ["lng"] };
+    "/[lng]/copilot": { params: ["lng"] };
+    "/[lng]/friends": { params: ["lng"] };
   };
-
   export type RouteId = keyof Routes;
+  export type AllowedLocales = "en-US" | "en-GB" | "en-AU" | "en-CA" | "en-NG" | "en-ZA" | "es" | "de" | "en-US" | "en-GB" | "fr" | "fr-CA";
 
   export type ParamsRecord<T extends RouteId> =
     Routes[T]["params"] extends Array<string>
-      ? { [K in Routes[T]["params"][number]]: string }
+      ? { [K in Routes[T]["params"][number]]: K extends "lng" ? AllowedLocales : string }
       : never;
 
   export type RouteOptions<T extends RouteId> = {

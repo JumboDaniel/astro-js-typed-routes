@@ -1,0 +1,31 @@
+---
+import { $path } from "astro-js-typesafe-routes/path";
+import Link from "astro-js-typesafe-routes/link";
+
+export function getStaticPaths() {
+  return [
+    { params: { lng: "en" } },
+    { params: { lng: "en-US" } },
+    { params: { lng: "fr" } },
+    { params: { lng: "fr-CA" } },
+  ];
+}
+
+const currentLang = Astro.params.lng;
+
+// This should work perfectly
+const homePath = $path({ to: "/", locale: currentLang });
+
+// This strict type checking relies on ParamsRecord enforcing lng to be AllowedLocales
+const contactPath = $path({ to: "/[lng]/contact", params: { lng: "en-US" } });
+---
+
+<html>
+  <body>
+    <h1>Language: {currentLang}</h1>
+    <a href={homePath}>Home</a>
+    <a href={contactPath}>English US Contact</a>
+    <Link to="/[lng]/contact" params={{ lng: "en-NG" }}>French Contact</Link>
+    <Link to="/[lng]/friends" params={{ lng: "fr-CA" }}>French CA Contact</Link>
+  </body>
+</html>
